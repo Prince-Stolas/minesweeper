@@ -1,7 +1,8 @@
 program Minesweeper;
 
 uses
-	termio;
+	termio,
+	sysutils;
 
 type
 	TField = record
@@ -178,6 +179,7 @@ var
 	buff: char;
 	lost, esc, won, first: boolean;
 	bperc, fw, fh, valCode, bombc: integer;
+	timeStart: TDateTime;
 begin
 	if ParamCount<>3 then
 		exitWErr('Usage: minesweeper <width> <height> <bomb-percentage>' +chr(10)+
@@ -217,6 +219,8 @@ begin
 
 	dec(fw);
 	dec(fh);
+
+	timeStart := Time;
 
 	fieldSetup(field, fw, fh, bperc);
 
@@ -271,5 +275,5 @@ begin
 	tcSetAttr(0, TCSANOW, origTerm);
 	
 	if lost then writeln('You lost! :(');
-	if won  then writeln('You won! :)')
+	if won  then writeln('You won! :)',#10,'Timer: ', TimeToStr(Time-timeStart))
 end.
